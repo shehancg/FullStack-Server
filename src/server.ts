@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import * as usersController from "./controllers/users";
 import bodyParser from "body-parser";
 import authMiddleware from './middleware/auth'
+import cors from 'cors'
 
 // CREATE AN INSTANCE FROM EXPRESS
 const app = express();
@@ -16,6 +17,7 @@ const httpServer = createServer(app);
 //CREATES A NEW SOCKET.IO SERVER THAT USES THE HTTPSERVER OBJECT TO LISTEN FOR INCOMING WEBSOCKET CONNECTIONS
 const io = new Server(httpServer);
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
