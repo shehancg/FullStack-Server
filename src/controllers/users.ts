@@ -24,10 +24,17 @@ export const register = async(
     next:NextFunction) => {
         try {
             //check if a user with the same email already exists
-            const existingUser = await UserModel.findOne({email: req.body.email});
-            if(existingUser){
+            const existingEmail = await UserModel.findOne({email: req.body.email});
+            if(existingEmail){
                 return res.status(409).json({message: "Email already in use"});
             }
+
+            //check if a user with the same username already exists
+            const existingUsername = await UserModel.findOne({username: req.body.username});
+            if(existingUsername){
+                return res.status(409).json({message: "Username already in use"});
+            }
+
             // Procced to assign values 
             const newUser = new UserModel({
                 email: req.body.email,
@@ -40,7 +47,7 @@ export const register = async(
         } catch(err){
             if(err instanceof Error.ValidationError){
                 const messages = Object.values(err.errors).map((err) => err.message);
-                return res.status(422).json(messages);
+                return res.status(422).json(messages);               
             }
             next(err);
         }
