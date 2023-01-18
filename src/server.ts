@@ -37,7 +37,7 @@ io.on("connection", () => {
 
 mongoose.set("strictQuery", false);
 mongoose.connect('mongodb+srv://ShehanAdmin:shehanadmin999@fullstackapp.mmqh54c.mongodb.net/FULLSTACKAPP').then(() => {
-    console.log('connected to DBbb');
+    console.log('DATABASE BADU WADA');
     httpServer.listen(4001, () => {
         console.log('API LISTINING TO 4001');
         /* process.on('warning', (warning) => {
