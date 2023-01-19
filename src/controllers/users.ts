@@ -12,10 +12,11 @@ const normalizeUser = (user:UserDocument) => {
         email: user.email,
         name: user.name,
         username: user.username,
-        id: user._id,
+        id: user.id,
         token: `Bearer ${token}`,
     };
 };
+// CHANGED user._id -> id   
 
 // REGISTER METHODS
 export const register = async(

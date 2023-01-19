@@ -4,10 +4,12 @@ import {createServer} from "http";
 //IMPORT SERVER FUNCTION FROM SOCKET.IO
 import {Server} from "socket.io";
 import mongoose from "mongoose";
-import * as usersController from "./controllers/users";
 import bodyParser from "body-parser";
 import authMiddleware from './middleware/auth'
 import cors from 'cors'
+
+import * as usersController from "./controllers/users";
+import * as boardsController from "./controllers/boards"
 
 // CREATE AN INSTANCE FROM EXPRESS
 const app = express();
@@ -21,15 +23,24 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+mongoose.set("toJSON", {
+    virtuals: true,
+    transform: (_, converted) => {
+      delete converted._id;
+    },
+  });
+
 app.get("/", (req, res) => {
     res.send("BADU WADA");
 });
 
+// USER APIS
 app.post('/api/users',usersController.register)
-
 app.post('/api/users/login',usersController.login)
-
 app.get('/api/user',authMiddleware,usersController.currentUser)
+
+// BOARD APIS
+app.get('/api/boards',authMiddleware, boardsController.getBoards)
 
 io.on("connection", () => {
     console.log("connect");

@@ -5,6 +5,7 @@ export interface User {
     username:string;
     password:string;
     createdAt:Date;
+    updatedAt:Date;
 }
 
 //THIS IS JUST FOR MONGOOSE WE CAN USE THE ABOVE INTERFACE ANYWHERE
