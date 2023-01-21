@@ -1,0 +1,39 @@
+version: 2.1
+orbs:
+  heroku: circleci/heroku@2.0
+jobs:
+  testing:
+    docker:
+      - image: cimg/node:lts
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Test the app
+          command: npm test
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - run:
+          command: >
+            echo "The command above installs Heroku, the command below deploys.
+            What you do in between is up to you!"
+      - heroku/deploy-via-git
+      - run:
+          name: Check deployment status
+          command: |
+            heroku ps --app $HEROKU_APP_NAME
+workflows:
+  heroku_deploy:
+    jobs:
+      - testing
+      - deploy:
+          requires:
+            - testing
