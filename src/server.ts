@@ -12,7 +12,7 @@ import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
 
 // CREATE AN INSTANCE FROM EXPRESS
-const app = express();
+export const app = express();
 //CREATES AN HTTP SERVER USING THE CREATESERVER FUNCTION AND THE APP OBJECT.
 const httpServer = createServer(app);
 //CREATES A NEW INSTANCE OF THE SOCKET.IO SERVER.
