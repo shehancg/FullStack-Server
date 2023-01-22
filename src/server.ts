@@ -11,6 +11,8 @@ import cors from 'cors'
 import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
 
+//require("dotenv").config();
+
 // CREATE AN INSTANCE FROM EXPRESS
 export const app = express();
 //CREATES AN HTTP SERVER USING THE CREATESERVER FUNCTION AND THE APP OBJECT.
@@ -47,11 +49,13 @@ io.on("connection", () => {
     console.log("connect");
 })
 
+const PORT = process.env.PORT || 4000;
+
 mongoose.set("strictQuery", false);
 mongoose.connect('mongodb+srv://ShehanAdmin:shehanadmin999@fullstackapp.mmqh54c.mongodb.net/FULLSTACKAPP').then(() => {
-    console.log('DATABASE BADU WADA');
-    httpServer.listen(4001, () => {
-        console.log('API LISTINING TO 4001');
+    console.log('DATABASE WADA');
+    httpServer.listen(PORT, () => {
+        console.log(`Server listening on port ${PORT}!`);
         /* process.on('warning', (warning) => {
             console.log(warning.stack);
         }); */

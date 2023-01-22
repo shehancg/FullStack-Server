@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.ts",
-    "test": "jest --detectOpenHandles",
+    "dev": "nodemon --watch src --ext ts --exec npx ts-node src/server.ts",
+    "start": "cd dist/src && node server.js",
+    "build":"npx tsc",
+    "test": "jest --detectOpenHandles --forceExit",
     "test:watch": "jest --watch"
   },
   "author": "",

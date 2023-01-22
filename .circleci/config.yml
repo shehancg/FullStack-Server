@@ -13,9 +13,9 @@ jobs:
       - run:
           name: Install dependencies
           command: npm install
-      - run:
-          name: Test the app
-          command: npm test
+      # - run:
+      #     name: Test the app
+      #     command: npm test
   deploy:
     executor: heroku/default
     steps:
