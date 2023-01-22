@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch src --ext ts --exec npx ts-node src/server.ts",
-    "start": "cd dist/src && node server.js",
-    "build":"npx tsc",
+    "start": "nodemon src/server.ts",
     "test": "jest --detectOpenHandles --forceExit",
     "test:watch": "jest --watch"
   },

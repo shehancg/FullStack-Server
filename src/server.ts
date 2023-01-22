@@ -43,6 +43,7 @@ app.get('/api/user',authMiddleware,usersController.currentUser);
 
 // BOARD APIS
 app.get('/api/boards',authMiddleware, boardsController.getBoards);
+app.get("/api/boards/:boardId", authMiddleware, boardsController.getBoard);
 app.post('/api/boards',authMiddleware, boardsController.createBoard)
 
 io.on("connection", () => {
@@ -53,7 +54,7 @@ const PORT = process.env.PORT || 4000;
 
 mongoose.set("strictQuery", false);
 mongoose.connect('mongodb+srv://ShehanAdmin:shehanadmin999@fullstackapp.mmqh54c.mongodb.net/FULLSTACKAPP').then(() => {
-    console.log('DATABASE WADA');
+    console.log('DATABASE WORKING');
     httpServer.listen(PORT, () => {
         console.log(`Server listening on port ${PORT}!`);
         /* process.on('warning', (warning) => {
