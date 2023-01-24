@@ -13,6 +13,8 @@ import { Socket } from "./types/socket.interface"
 
 import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
+import * as columnsController from "./controllers/columns";
+
 import { SocketEventsEnum } from "./types/socketEvents.enum";
 import { secret } from "./config";
 import User from "./models/user";
@@ -57,6 +59,8 @@ app.get('/api/boards',authMiddleware, boardsController.getBoards);
 app.get("/api/boards/:boardId", authMiddleware, boardsController.getBoard);
 app.post('/api/boards',authMiddleware, boardsController.createBoard)
 
+app.get("/api/boards/:boardId/columns", authMiddleware, columnsController.getColumns);
+
 io.use(async (socket: Socket, next) => {
     try {
         const token = (socket.handshake.auth.token as string) ?? "";
@@ -80,6 +84,9 @@ io.use(async (socket: Socket, next) => {
     });
     socket.on(SocketEventsEnum.boardsLeave, (data) =>{
         boardsController.leaveBoard(io, socket, data);
+    });
+    socket.on(SocketEventsEnum.columnsCreate, (data) => {
+      columnsController.createColumn(io, socket, data);
     });
 })
 
