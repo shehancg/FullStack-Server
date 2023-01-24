@@ -49,7 +49,7 @@ export const joinBoard = (
     socket: Socket,
     data: { boardId: string }
   ) => {
-    console.log("server socket io Join", data.boardId);
+    console.log("server socket io Join", socket.user);
     socket.join(data.boardId);
 };
 

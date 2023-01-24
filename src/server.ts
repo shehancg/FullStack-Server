@@ -5,6 +5,7 @@ import {createServer} from "http";
 import {Server} from "socket.io";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import jwt from "jsonwebtoken";
 import authMiddleware from './middleware/auth'
 import cors from 'cors'
 
@@ -13,6 +14,8 @@ import { Socket } from "./types/socket.interface"
 import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
 import { SocketEventsEnum } from "./types/socketEvents.enum";
+import { secret } from "./config";
+import User from "./models/user";
 
 
 //require("dotenv").config();
@@ -54,7 +57,24 @@ app.get('/api/boards',authMiddleware, boardsController.getBoards);
 app.get("/api/boards/:boardId", authMiddleware, boardsController.getBoard);
 app.post('/api/boards',authMiddleware, boardsController.createBoard)
 
-io.on("connection", (socket) => {
+io.use(async (socket: Socket, next) => {
+    try {
+        const token = (socket.handshake.auth.token as string) ?? "";
+        const data = jwt.verify(token.split(" ")[1], secret) as {
+          id: string;
+          email: string;
+        };
+        const user = await User.findById(data.id);
+    
+        if (!user) {
+          return next(new Error("Authentication error"));
+        }
+        socket.user = user;
+        next();
+      } catch (err) {
+        next(new Error("Authentication error"));
+      }
+}).on("connection", (socket) => {
     socket.on(SocketEventsEnum.boardsJoin, (data) =>{
         boardsController.joinBoard(io, socket, data);
     });
