@@ -8,8 +8,12 @@ import bodyParser from "body-parser";
 import authMiddleware from './middleware/auth'
 import cors from 'cors'
 
+import { Socket } from "./types/socket.interface"
+
 import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
+import { SocketEventsEnum } from "./types/socketEvents.enum";
+
 
 //require("dotenv").config();
 
@@ -19,7 +23,11 @@ export const app = express();
 const httpServer = createServer(app);
 //CREATES A NEW INSTANCE OF THE SOCKET.IO SERVER.
 //CREATES A NEW SOCKET.IO SERVER THAT USES THE HTTPSERVER OBJECT TO LISTEN FOR INCOMING WEBSOCKET CONNECTIONS
-const io = new Server(httpServer);
+const io = new Server(httpServer,{
+    cors:{
+        origin: "*"
+    },
+});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -46,8 +54,13 @@ app.get('/api/boards',authMiddleware, boardsController.getBoards);
 app.get("/api/boards/:boardId", authMiddleware, boardsController.getBoard);
 app.post('/api/boards',authMiddleware, boardsController.createBoard)
 
-io.on("connection", () => {
-    console.log("connect");
+io.on("connection", (socket) => {
+    socket.on(SocketEventsEnum.boardsJoin, (data) =>{
+        boardsController.joinBoard(io, socket, data);
+    });
+    socket.on(SocketEventsEnum.boardsLeave, (data) =>{
+        boardsController.leaveBoard(io, socket, data);
+    });
 })
 
 const PORT = process.env.PORT || 4000;
