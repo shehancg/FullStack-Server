@@ -3,6 +3,8 @@ import BoardModel from '../models/boards'
 import { ExpressRequestInterface } from "../types/expressRequest.interface";
 import { Server } from "socket.io";
 import { Socket } from "../types/socket.interface";
+import { SocketEventsEnum } from "../types/socketEvents.enum";
+import { getErrorMessage } from "../helpers";
 
 export const getBoards = async (req: ExpressRequestInterface, res: Response, next: NextFunction) => {
     try{
@@ -61,3 +63,30 @@ export const leaveBoard = (
     console.log("server socket io Leave", data.boardId);
     socket.leave(data.boardId);
 };
+
+export const updateBoard = async (
+    io: Server,
+    socket: Socket,
+    data: { boardId: string; fields: { title: string } }
+  ) => {
+    try {
+      if (!socket.user) {
+        socket.emit(
+          SocketEventsEnum.boardsUpdateFailure,
+          "User is not authorized"
+        );
+        return;
+      }
+      const updatedBoard = await BoardModel.findByIdAndUpdate(
+        data.boardId,
+        data.fields,
+        { new: true }
+      );
+      io.to(data.boardId).emit(
+        SocketEventsEnum.boardsUpdateSuccess,
+        updatedBoard
+      );
+    } catch (err) {
+      socket.emit(SocketEventsEnum.boardsUpdateFailure, getErrorMessage(err));
+    }
+  };
