@@ -14,6 +14,7 @@ import { Socket } from "./types/socket.interface"
 import * as usersController from "./controllers/users";
 import * as boardsController from "./controllers/boards"
 import * as columnsController from "./controllers/columns";
+import * as tasksController from "./controllers/tasks";
 
 import { SocketEventsEnum } from "./types/socketEvents.enum";
 import { secret } from "./config";
@@ -61,6 +62,8 @@ app.post('/api/boards',authMiddleware, boardsController.createBoard)
 
 app.get("/api/boards/:boardId/columns", authMiddleware, columnsController.getColumns);
 
+app.get("/api/boards/:boardId/tasks", authMiddleware, tasksController.getTasks);
+
 io.use(async (socket: Socket, next) => {
     try {
         const token = (socket.handshake.auth.token as string) ?? "";
@@ -87,6 +90,9 @@ io.use(async (socket: Socket, next) => {
     });
     socket.on(SocketEventsEnum.columnsCreate, (data) => {
       columnsController.createColumn(io, socket, data);
+    });
+    socket.on(SocketEventsEnum.tasksCreate, (data) => {
+      tasksController.createTask(io, socket, data);
     });
 })
 
