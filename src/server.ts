@@ -97,6 +97,15 @@ io.use(async (socket: Socket, next) => {
     socket.on(SocketEventsEnum.tasksCreate, (data) => {
       tasksController.createTask(io, socket, data);
     });
+    socket.on(SocketEventsEnum.boardsDelete, (data) => {
+      boardsController.deleteBoard(io, socket, data);
+    });
+    socket.on(SocketEventsEnum.columnsDelete, (data) => {
+      columnsController.deleteColumn(io, socket, data);
+    });
+    socket.on(SocketEventsEnum.columnsUpdate, (data) => {
+      columnsController.updateColumn(io, socket, data);
+    });
 })
 
 const PORT = process.env.PORT || 4000;

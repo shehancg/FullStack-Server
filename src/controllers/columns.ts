@@ -50,3 +50,53 @@ export const createColumn = async (
     socket.emit(SocketEventsEnum.columnsCreateFailure, getErrorMessage(err));
   }
 };
+
+export const deleteColumn = async (
+  io: Server,
+  socket: Socket,
+  data: { boardId: string; columnId: string }
+) => {
+  try {
+    if (!socket.user) {
+      socket.emit(
+        SocketEventsEnum.columnsDeleteFailure,
+        "User is not authorized"
+      );
+      return;
+    }
+    await ColumnModel.deleteOne({ _id: data.columnId });
+    io.to(data.boardId).emit(
+      SocketEventsEnum.columnsDeleteSuccess,
+      data.columnId
+    );
+  } catch (err) {
+    socket.emit(SocketEventsEnum.columnsDeleteFailure, getErrorMessage(err));
+  }
+};
+
+export const updateColumn = async (
+  io: Server,
+  socket: Socket,
+  data: { boardId: string; columnId: string; fields: { title: string } }
+) => {
+  try {
+    if (!socket.user) {
+      socket.emit(
+        SocketEventsEnum.columnsUpdateFailure,
+        "User is not authorized"
+      );
+      return;
+    }
+    const updatedColumn = await ColumnModel.findByIdAndUpdate(
+      data.columnId,
+      data.fields,
+      { new: true }
+    );
+    io.to(data.boardId).emit(
+      SocketEventsEnum.columnsUpdateSuccess,
+      updatedColumn
+    );
+  } catch (err) {
+    socket.emit(SocketEventsEnum.columnsUpdateFailure, getErrorMessage(err));
+  }
+};
