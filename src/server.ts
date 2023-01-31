@@ -119,12 +119,12 @@ const PORT = process.env.PORT || 4000;
 mongoose.set("strictQuery", false);
 mongoose.connect('mongodb+srv://ShehanAdmin:shehanadmin999@fullstackapp.mmqh54c.mongodb.net/FULLSTACKAPP').then(() => {
     console.log('DATABASE WORKING');
-    httpServer.listen(PORT, () => {
-        console.log(`Server listening on port ${PORT}!`);
-        /* process.on('warning', (warning) => {
-            console.log(warning.stack);
-        }); */
-    });
+    // httpServer.listen(PORT, () => {
+    //     console.log(`Server listening on port ${PORT}!`);
+    //     /* process.on('warning', (warning) => {
+    //         console.log(warning.stack);
+    //     }); */
+    // });
 });
 
 //httpServer.listen("https://fullstackapp97.herokuapp.com"

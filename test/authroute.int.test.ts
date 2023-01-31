@@ -16,7 +16,7 @@ describe("POST /userreg", () => {
   it("USER REGISTRATION", function (done) {
     request(app)
       .post("/api/users")
-      .send({email:"jackchan@gmail.com", name:"jack", username:"jackchan", password: "1234"})
+      .send({email:"jack3@gmail.com", name:"jack", username:"jack3", password: "1234"})
       .set("Accept", "application/json")
       .expect(200)
       .end(function (err, res) {

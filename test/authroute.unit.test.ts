@@ -43,7 +43,7 @@ describe('currentUser', () => {
   let res: any;
 
   beforeEach(() => {
-    req = { user: { email: 'shehan@gmail.com', password: '12345' } };
+    req = { user: { email: 'shehan@gmail.com', password: '1234' } };
     res = { send: jest.fn(), sendStatus: jest.fn() };
   });
 
