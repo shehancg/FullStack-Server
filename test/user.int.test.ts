@@ -12,7 +12,7 @@ describe("POST /userlogin", () => {
   });
 });
 
-describe("POST /userreg", () => {
+describe("POST /userReg", () => {
   it("USER REGISTRATION", function (done) {
     request(app)
       .post("/api/users")

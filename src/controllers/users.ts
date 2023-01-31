@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { secret } from '../config';
 import { ExpressRequestInterface } from "../types/expressRequest.interface";
 
-const normalizeUser = (user:UserDocument) => {
+export const normalizeUser = (user:UserDocument) => {
     const token = jwt.sign({id: user.id, email: user.email }, secret )
     return{
         email: user.email,

@@ -3,9 +3,9 @@ import {app} from "../src/server";
 import TaskModel from "../src/models/task";
 
 describe('GET /boards/:boardId/tasks', () => {
-  beforeEach(async () => {
-    await TaskModel.deleteMany({});
-  });
+  // beforeEach(async () => {
+  //   await TaskModel.deleteMany({});
+  // });
 
   it('should return 401 if user is not logged in', async () => {
     const response = await request(app).get('/api/boards/1/tasks');
